@@ -57,8 +57,8 @@ jobs:
         Copy-Item dist\WhatsAppAutomation.exe release-windows\
         Copy-Item app_config.json release-windows\
         Copy-Item requirements.txt release-windows\
-        Copy-Item -Recurse data release-windows\
-        Copy-Item -Recurse templates release-windows\
+        if (Test-Path data) { Copy-Item -Recurse data release-windows\ }
+        if (Test-Path templates) { Copy-Item -Recurse templates release-windows\ }
         Copy-Item README.md release-windows\
         Copy-Item HOW_TO_USE.md release-windows\
         Copy-Item DEPLOYMENT_README.md release-windows\
@@ -71,8 +71,8 @@ jobs:
         cp dist/WhatsAppAutomation release-macos/
         cp app_config.json release-macos/
         cp requirements.txt release-macos/
-        cp -r data release-macos/
-        cp -r templates release-macos/
+        [ -d data ] && cp -r data release-macos/ || echo "data directory not found, skipping"
+        [ -d templates ] && cp -r templates release-macos/ || echo "templates directory not found, skipping"
         cp README.md release-macos/
         cp HOW_TO_USE.md release-macos/
         cp DEPLOYMENT_README.md release-macos/
