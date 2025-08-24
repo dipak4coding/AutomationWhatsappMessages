@@ -53,15 +53,16 @@ jobs:
     - name: Create release package (Windows)
       if: matrix.os == 'windows-latest'
       run: |
-        mkdir release-windows
-        copy dist\WhatsAppAutomation.exe release-windows\
-        copy app_config.json release-windows\
-        copy requirements.txt release-windows\
-        xcopy /E /I data release-windows\data
-        xcopy /E /I templates release-windows\templates
-        copy README.md release-windows\
-        copy HOW_TO_USE.md release-windows\
-        copy DEPLOYMENT_README.md release-windows\
+        New-Item -ItemType Directory -Path release-windows
+        Copy-Item dist\WhatsAppAutomation.exe release-windows\
+        Copy-Item app_config.json release-windows\
+        Copy-Item requirements.txt release-windows\
+        Copy-Item -Recurse data release-windows\
+        Copy-Item -Recurse templates release-windows\
+        Copy-Item README.md release-windows\
+        Copy-Item HOW_TO_USE.md release-windows\
+        Copy-Item DEPLOYMENT_README.md release-windows\
+      shell: pwsh
 
     - name: Create release package (macOS)
       if: matrix.os == 'macos-latest'
