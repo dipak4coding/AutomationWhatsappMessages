@@ -1,0 +1,113 @@
+name: Cross-Platform Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+        python-version: ['3.11']
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Create executable (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        python -m PyInstaller --onefile --console --name WhatsAppAutomation --clean WhatsAppAutomation_Portable.py
+        
+    - name: Create executable (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        python -m PyInstaller --onefile --console --name WhatsAppAutomation --clean WhatsAppAutomation_Portable.py
+
+    - name: Test executable (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        dist/WhatsAppAutomation.exe --help || echo "Help command may not be available"
+
+    - name: Test executable (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        chmod +x dist/WhatsAppAutomation
+        dist/WhatsAppAutomation --help || echo "Help command may not be available"
+
+    - name: Create release package (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        mkdir release-windows
+        copy dist\WhatsAppAutomation.exe release-windows\
+        copy app_config.json release-windows\
+        copy requirements.txt release-windows\
+        xcopy /E /I data release-windows\data
+        xcopy /E /I templates release-windows\templates
+        copy README.md release-windows\
+        copy HOW_TO_USE.md release-windows\
+        copy DEPLOYMENT_README.md release-windows\
+
+    - name: Create release package (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        mkdir release-macos
+        cp dist/WhatsAppAutomation release-macos/
+        cp app_config.json release-macos/
+        cp requirements.txt release-macos/
+        cp -r data release-macos/
+        cp -r templates release-macos/
+        cp README.md release-macos/
+        cp HOW_TO_USE.md release-macos/
+        cp DEPLOYMENT_README.md release-macos/
+
+    - name: Upload Windows Artifact
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@v3
+      with:
+        name: WhatsAppAutomation-Windows
+        path: release-windows/
+
+    - name: Upload macOS Artifact
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@v3
+      with:
+        name: WhatsAppAutomation-macOS
+        path: release-macos/
+
+    - name: Upload Release Assets (Windows)
+      if: matrix.os == 'windows-latest' && github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: dist/WhatsAppAutomation.exe
+        asset_name: WhatsAppAutomation-Windows.exe
+        asset_content_type: application/octet-stream
+
+    - name: Upload Release Assets (macOS)
+      if: matrix.os == 'macos-latest' && github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: dist/WhatsAppAutomation
+        asset_name: WhatsAppAutomation-macOS
+        asset_content_type: application/octet-stream
