@@ -1,0 +1,163 @@
+{
+  "_comment": "WhatsApp Automation - Portable Configuration File",
+  "_version": "1.0",
+  "_created": "2025-08-21",
+  "application": {
+    "name": "WhatsApp Automation",
+    "version": "1.0.0",
+    "debug_mode": false
+  },
+  "paths": {
+    "_comment": "All paths are relative to the application directory",
+    "csv_path": "data/clients.csv",
+    "active_message_path": "templates/active_message.txt",
+    "inactive_message_path": "templates/inactive_message.txt",
+    "no_instruction_message_path": "templates/no_instruction_message.txt",
+    "log_folder": "logs",
+    "error_log_path": "logs/error_log.json",
+    "summary_csv_path": "output/MessageSummary.csv",
+    "user_data_shs": "user_data/profile_shs",
+    "user_data_sud": "user_data/profile_sud"
+  },
+  "business_logic": {
+    "_comment": "Core business rules and calculations",
+    "hearing_date_offset_days": 7,
+    "future_date_offset_days": 1000,
+    "csv_max_age_hours": 48,
+    "csv_warning_age_hours": 24,
+    "selected_categories": [
+      "Active",
+      "NoClientsInstruction"
+    ],
+    "required_csv_columns": [
+      "Client",
+      "Contact",
+      "NextHearingDate",
+      "Category",
+      "TypRnRy",
+      "Parties"
+    ]
+  },
+  "automation_settings": {
+    "_comment": "Timing and retry configurations",
+    "max_session_retries": 3,
+    "session_check_timeout": 30,
+    "message_send_delay": 5,
+    "max_message_retries": 2,
+    "webdriver_timeout": 20,
+    "login_timeout": 60,
+    "cleanup_pause_seconds": 30
+  },
+  "selectors": {
+    "_comment": "XPath and CSS selectors for WhatsApp Web elements",
+    "send_button_selectors": [
+      "//span[@data-testid='send']",
+      "//*[@id='main']/footer/div[1]/div/span/div/div[2]/div/div[4]/button",
+      "//button[@aria-label='Send']",
+      "//div[@data-testid='compose-btn-send']",
+      "/html/body/div[1]/div/div/div[3]/div/div[4]/div/footer/div[1]/div/span/div/div[2]/div/div[4]/button",
+      "//*[@id='main']/footer/div[1]/div/span/div/div[2]/div/div[4]/button/span"
+    ],
+    "chat_loaded_selectors": [
+      "//div[@data-testid='conversation-compose-box-input']",
+      "//*[@id='main']/footer/div[1]/div/span/div/div[2]/div/div[1]/div/div[2]",
+      "//div[@contenteditable='true'][@data-tab='10']"
+    ],
+    "session_selectors": [
+      {
+        "type": "ID",
+        "value": "pane-side",
+        "description": "Main chat pane"
+      },
+      {
+        "type": "XPATH",
+        "value": "//div[@data-testid='chat-list']",
+        "description": "Chat list"
+      },
+      {
+        "type": "XPATH",
+        "value": "//div[@id='app']//div[contains(@class,'two')]",
+        "description": "Two-pane layout"
+      },
+      {
+        "type": "XPATH",
+        "value": "//header[@data-testid='chat-header']",
+        "description": "Any chat header"
+      },
+      {
+        "type": "XPATH",
+        "value": "//div[@contenteditable='true'][@data-tab='10']",
+        "description": "Message input"
+      }
+    ],
+    "qr_code_selector": "//div[@data-testid='qr-code']"
+  },
+  "chrome_options": {
+    "_comment": "Chrome browser configuration options",
+    "arguments": [
+      "--disable-extensions",
+      "--no-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--disable-web-security",
+      "--allow-running-insecure-content",
+      "--disable-features=VizDisplayCompositor",
+      "--remote-debugging-port=9222"
+    ],
+    "experimental_options": {
+      "detach": true,
+      "useAutomationExtension": false,
+      "excludeSwitches": [
+        "enable-automation",
+        "enable-logging"
+      ]
+    },
+    "preferences": {
+      "profile.default_content_setting_values.notifications": 2,
+      "profile.default_content_settings.popups": 0,
+      "profile.managed_default_content_settings.images": 2
+    }
+  },
+  "notifications": {
+    "_comment": "Admin notification contacts",
+    "contact1": "+917756991516",
+    "contact2": "+491736620608",
+    "summary_template": "WhatsApp Automation Summary - {datetime}\\n\\nSuccessfully delivered messages for hearing date {hearing_date} to {successful_count} out of {total_count} clients.\\n\\nDetailed Summary:\\n{summary_table}"
+  },
+  "logging": {
+    "_comment": "Logging configuration",
+    "level": "INFO",
+    "format": "%(asctime)s - %(levelname)s - %(message)s",
+    "max_log_size_mb": 5,
+    "backup_count": 3,
+    "console_logging": true
+  },
+  "platform_specific": {
+    "_comment": "Platform-specific configurations",
+    "windows": {
+      "chrome_path": "",
+      "temp_dir": "temp"
+    },
+    "mac": {
+      "chrome_path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "temp_dir": "/tmp"
+    },
+    "linux": {
+      "chrome_path": "/usr/bin/google-chrome",
+      "temp_dir": "/tmp"
+    }
+  },
+  "validation": {
+    "_comment": "Data validation rules",
+    "phone_number_formats": [
+      "+{country_code}{number}",
+      "{country_code}{number}",
+      "{number}"
+    ],
+    "date_formats": [
+      "%Y-%m-%d",
+      "%d/%m/%Y",
+      "%m/%d/%Y"
+    ]
+  }
+}

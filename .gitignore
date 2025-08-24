@@ -1,0 +1,44 @@
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Chrome user data directories (contain sensitive data and are very large)
+user_data/
+**/chrome_profile*
+**/User_Data*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Output and build directories
+output/
+build/
+dist/
+
+# Large executable files (will be built automatically)
+WhatsAppAutomation
+
+# Temporary files
+*.tmp
+*.temp
+
+# Data files that might contain sensitive information
+data/clients.csv
+data/processed_*

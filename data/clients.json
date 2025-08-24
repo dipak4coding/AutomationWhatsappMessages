@@ -1,0 +1,18 @@
+[
+    {
+        "Client":"Test Client",
+        "Contact":"+1234567890",
+        "NextHearingDate":"2025-08-28",
+        "Category":"Active",
+        "TypRnRy":"Test Case",
+        "Parties":"Test vs Test"
+    },
+    {
+        "Client":"Test Client 2",
+        "Contact":"+0987654321",
+        "NextHearingDate":"2025-08-28",
+        "Category":"NoClientsInstruction",
+        "TypRnRy":"Test Case 2",
+        "Parties":"Test2 vs Test2"
+    }
+]

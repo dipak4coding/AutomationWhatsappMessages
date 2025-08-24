@@ -1,0 +1,33 @@
+# WhatsApp Automation - Python Requirements
+# Use with: pip install -r requirements.txt
+
+# Core Selenium and WebDriver
+selenium==4.27.1
+webdriver-manager==4.0.2
+
+# Data Processing
+pandas==2.2.3
+openpyxl==3.1.5
+
+# HTTP Requests (for webdriver-manager)
+requests==2.32.3
+urllib3==2.2.3
+
+# Build Tool (for creating executables)
+pyinstaller==6.15.0
+
+# Date/Time utilities (usually built-in, but explicit for clarity)
+python-dateutil==2.9.0
+
+# JSON handling (built-in, but some systems need explicit)
+# json - built into Python
+
+# Logging and OS utilities (built-in to Python)
+# logging, os, sys, platform, pathlib, shutil, subprocess - all built-in
+
+# Optional: Enhanced logging (if using advanced logging features)
+# colorlog==6.8.2
+
+# Development/Testing (optional)
+# pytest==8.3.3
+# pytest-cov==6.0.0
